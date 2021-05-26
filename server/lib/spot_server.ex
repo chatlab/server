@@ -1,4 +1,4 @@
-defmodule Server do
+defmodule SpotServer do
   @moduledoc """
   Documentation for `Server`.
   """
@@ -13,6 +13,7 @@ defmodule Server do
 
   """
   def hello do
+    IO.puts("Hello World!")
     :world
   end
 end

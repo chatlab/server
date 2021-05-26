@@ -1,4 +1,4 @@
-defmodule Server.MixProject do
+defmodule SpotServer.MixProject do
   use Mix.Project
 
   def project do

@@ -1,8 +1,8 @@
-defmodule ServerTest do
+defmodule SpotServerTest do
   use ExUnit.Case
-  doctest Server
+  doctest SpotServer
 
   test "greets the world" do
-    assert Server.hello() == :world
+    assert SpotServer.hello() == :world
   end
 end
