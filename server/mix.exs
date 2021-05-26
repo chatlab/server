@@ -3,7 +3,7 @@ defmodule SpotServer.MixProject do
 
   def project do
     [
-      app: :server,
+      app: :spot_server,
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
