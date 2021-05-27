@@ -10,14 +10,13 @@ defmodule SpotServer do
     timeout = Application.get_env(:spot_server, :timeout, 60000)
     ws_endpoint = Application.get_env(:spot_server, :ws_endpoint, "ws")
 
-
     children = [
       Plug.Adapters.Cowboy.child_spec(
         scheme: :http,
         plug: SpotServer.Router,
         options: [
           port: port,
-          dispatch: dispatch(ws_endpoint, timeout),
+          dispatch: dispatch(ws_endpoint, timeout)
         ]
       ),
       supervisor(Registry, [:unique, @registry_key])

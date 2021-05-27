@@ -1,12 +1,11 @@
 defmodule SpotServer.SocketAcceptor do
-  @behaviour :cowboy_websocket_handler
+  require Logger
 
+  @behaviour :cowboy_websocket_handler
   @sub_type "subscribe"
   @pub_type "publish"
 
-  def init(_, _req, _opts) do
-    {:upgrade, :protocol, :cowboy_websocket}
-  end
+  def init(req, opts), do: {:cowboy_websocket, req, opts}
 
   # Called on websocket connection initialization.
   def websocket_init(_type, req, opts) do
@@ -18,37 +17,42 @@ defmodule SpotServer.SocketAcceptor do
   end
 
   # Respond to ping
-  def websocket_handle({:text, "ping"}, req, state) do
-    {:reply, {:text, "pong"}, req, state}
+  def websocket_handle({:text, "ping"}, state) do
+    {:reply, {:text, "pong"}, state}
   end
 
   # Handle messages from client, either we subscribe, or publish.
   # The result is a nack or ack depending on outcome.
-  def websocket_handle({:text, content}, req, %{registry_key: registry_key} = state) do
-    %{"type" => type, "topic" => topic} = msg = content |> Poison.decode!()
+  def websocket_handle({:text, content}, state) do
+    registry_key = Keyword.get(state, :registry_key)
+    content = Poison.decode!(content)
 
-    resp =
+    %{"type" => type, "topic" => topic} = content
+
+    response =
       case type do
         @sub_type ->
           SpotServer.PubSub.subscribe(topic, registry_key)
 
         @pub_type ->
-          SpotServer.PubSub.publish({topic, Map.get(msg, "payload")}, self(), registry_key)
+          SpotServer.PubSub.publish({topic, Map.get(content, "payload")}, self(), registry_key)
 
         _ ->
           %{type: "nack"}
       end
       |> Poison.encode!()
 
-    {:reply, {:text, resp}, req, state}
+    {:reply, {:text, response}, state}
   end
 
   # Messages received through the info callback are from
   # other elixir processes, for instance when a publish
   # is performed on a topic this process subscribes on
   # we send the messge to the client
-  def websocket_info({:broadcast, message}, req, state) do
-    {:reply, {:text, message}, req, state}
+  def websocket_info({:broadcast, message}, state) do
+    Logger.info("Socket info: ")
+    Logger.info(message, state)
+    {:reply, {:text, message}, state}
   end
 
   # No matter why we terminate, remove all of this pids subscriptions
