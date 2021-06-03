@@ -15,7 +15,7 @@ defmodule SpotServer.MixProject do
   def application do
     [
       mod: {SpotServer, []},
-      extra_applications: [:logger, :cowboy, :plug]
+      extra_applications: [:logger, :cowboy]
     ]
   end
 
@@ -23,10 +23,10 @@ defmodule SpotServer.MixProject do
   defp deps do
     [
       {:cowboy, "~> 2.9"},
-      {:credo, "~> 1.5"},
-      {:plug, "~> 1.0"},
-      {:plug_cowboy, "~> 2.5"},
-      {:poison, "~> 4.0"}
+      {:poison, "~> 4.0"},
+      {:prometheus_ex, "~> 3.0"},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
+      {:elixir_uuid, "~> 1.2"}
 
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}

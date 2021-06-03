@@ -3,6 +3,4 @@
 use Mix.Config
 
 config :spot_server,
-  port: 4444,
-  timeout: 60000,
-  ws_endpooint: "ws"
+  port: 4444

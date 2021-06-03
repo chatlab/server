@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const ws = new WebSocket('ws://localhost:4333');
+const ws = new WebSocket('ws://localhost:4444');
 
 ws.on('open', () => {
 
@@ -7,9 +7,16 @@ ws.on('open', () => {
         event: 'join_room',
         room_id: 'test123',
     }
-    ws.send(message)
 
     ws.on('message', message => {
         console.log('Received message: ', message);
+    });
+
+    ws.on('pong', (message) => {
+        console.log('PONG!', message.toString());
+    });
+
+    ws.on('send_ping', (message) => {
+        console.log('send_ping!', message.toString());
     });
 });
