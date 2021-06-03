@@ -10,6 +10,6 @@ ws.on('open', () => {
     ws.send(message)
 
     ws.on('message', message => {
-        console.log('Recived message: ', message);
+        console.log('Received message: ', message);
     });
 });
