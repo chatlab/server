@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
+const ws = new WebSocket('ws://localhost:4333');
 
-ws = new WebSocket('ws://localhost:4333');
 ws.on('open', () => {
 
     const message = {
