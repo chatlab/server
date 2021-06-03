@@ -35,7 +35,6 @@ defmodule SpotServer.WebsocketController do
     {:reply, {:pong, "pong"}, state}
   end
 
-
   @impl :cowboy_websocket
   def websocket_info(:send_ping, state) do
     Logger.info("Sending a ping")
@@ -53,5 +52,4 @@ defmodule SpotServer.WebsocketController do
     Logger.warn("Unknown handle message: #{inspect(message)}")
     {:ok, state}
   end
-
 end
