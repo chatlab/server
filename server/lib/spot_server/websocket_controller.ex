@@ -3,6 +3,7 @@ defmodule SpotServer.WebsocketController do
   @behaviour :cowboy_websocket
 
   require Logger
+  require SpotServer.SessionManager
 
   @impl :cowboy_websocket
   def init(req, _state) do
@@ -19,7 +20,6 @@ defmodule SpotServer.WebsocketController do
     :timer.send_interval(:timer.seconds(5), :send_ping)
     {:ok, state}
   end
-
 
   def websocket_handle({:text, "ping"}, state) do
     Logger.info("Received a ping, responding a pong!")
@@ -43,18 +43,21 @@ defmodule SpotServer.WebsocketController do
   end
 
   @impl :cowboy_websocket
-  def websocket_handle({:text, msg}, state) do
-    case Poison.decode(msg) do
-      {:ok, parsed_msg} ->
-        Logger.info("Parser message: " <> parsed_msg)
-        {:ok, Session.handle_message(parsed_msg, state)}
+  def websocket_handle({:text, message}, state) do
+    Logger.info("Websocket handler called...")
+
+    case Poison.decode(message) do
+      {:ok, message} ->
+        Logger.info("Parser message=#{inspect(message)}, state=#{inspect(state)}")
+        {:ok, SessionManager.handle_message(message, state)}
 
       _ ->
-        answer = Poison.encode!(%{event: "error", description: "invalid json", received_msg: msg})
-        {:reply, {:text, answer}, state}
+        error_response =
+          Poison.encode!(%{event: "error", description: "Invalid json.", received_message: message})
+
+        {:reply, {:text, error_response}, state}
     end
   end
-
 
   @impl :cowboy_websocket
   def websocket_info(message, state) do
