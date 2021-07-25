@@ -35,7 +35,6 @@ defmodule SpotServer do
       {"localhost",
        [
          {"/", SpotServer.WebsocketController, []},
-         {"/status", SpotServer.PrometheusController, []}
        ]},
       {:_, [{"/", SpotServer.WebsocketController, []}]}
     ])

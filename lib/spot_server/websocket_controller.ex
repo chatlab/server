@@ -53,7 +53,11 @@ defmodule SpotServer.WebsocketController do
 
       _ ->
         error_response =
-          Poison.encode!(%{event: "error", description: "Invalid json.", received_message: message})
+          Poison.encode!(%{
+            event: "error",
+            description: "Invalid json.",
+            received_message: message
+          })
 
         {:reply, {:text, error_response}, state}
     end

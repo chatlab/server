@@ -3,4 +3,4 @@
 use Mix.Config
 
 config :spot_server,
-  port: 4444
+  port: 4333
