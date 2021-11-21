@@ -4,6 +4,7 @@ defmodule SpotServer.WebsocketController do
 
   require Logger
   alias SpotServer.SessionManager
+  alias SpotServer.Dto.Event
 
   @impl :cowboy_websocket
   def init(req, _state) do
@@ -46,7 +47,7 @@ defmodule SpotServer.WebsocketController do
   def websocket_handle({:text, message}, state) do
     Logger.info("Websocket handler called...")
 
-    case Poison.decode(message) do
+    case Poison.decode!(message, as: %Event{}) do
       {:ok, message} ->
         Logger.info("Parser message=#{inspect(message)}, state=#{inspect(state)}")
         {:ok, SessionManager.handle_message(message, state)}
