@@ -6,7 +6,7 @@ defmodule SpotServer.RoomManager do
   end
 
   def start_link(room_id) do
-    name = String.to_atom "ROOM_#{room_id}"
+    name = String.to_atom("ROOM_#{room_id}")
     GenServer.start_link(__MODULE__, :ok, name: name)
   end
 
@@ -16,6 +16,4 @@ defmodule SpotServer.RoomManager do
       {:error, {:already_started, pid}} -> pid
     end
   end
-
-
 end

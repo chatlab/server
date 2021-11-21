@@ -34,7 +34,7 @@ defmodule SpotServer do
     :cowboy_router.compile([
       {"localhost",
        [
-         {"/", SpotServer.WebsocketController, []},
+         {"/", SpotServer.WebsocketController, []}
        ]},
       {:_, [{"/", SpotServer.WebsocketController, []}]}
     ])

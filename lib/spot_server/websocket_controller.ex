@@ -3,7 +3,7 @@ defmodule SpotServer.WebsocketController do
   @behaviour :cowboy_websocket
 
   require Logger
-  require SpotServer.SessionManager
+  alias SpotServer.SessionManager
 
   @impl :cowboy_websocket
   def init(req, _state) do
